@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import pickle
 import sys
+import os
 from enum import Enum
 from typing import TYPE_CHECKING, Optional, Union
 
@@ -262,6 +263,10 @@ class nixl_agent:
                         init["thread_count"] = str(nixl_conf.num_threads)
                     elif bknd == "UCCL":
                         init["num_cpus"] = str(nixl_conf.num_threads)
+                if bknd == "UCX":
+                    mode = os.environ.get("NIXL_UCX_ERR_HANDLING_MODE")
+                    if mode is not None:
+                        init["ucx_error_handling_mode"] = mode
                 self.create_backend(bknd, init)
 
         self.nixl_mems = {
